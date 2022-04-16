@@ -63,6 +63,7 @@ export default {
                 <Contact
                     v-if="!loading && contacts.length"
                     :contacts="contacts"
+                    @removeContact="removeContact"
                 />
             </tbody>
         </table>
