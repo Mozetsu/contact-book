@@ -4,11 +4,15 @@ import APIController from "../../controllers/api";
 export default {
     props: ["contacts"],
     emits: ["removeContact"],
-    methods: {
-        deleteContact: async function (id) {
+    setup(props, context) {
+        const deleteContact = async (id) => {
             const success = await APIController.DeleteContact(id);
-            if (success) this.$emit("removeContact", id);
-        },
+            if (success) context.emit("removeContact", id);
+        };
+
+        return {
+            deleteContact,
+        };
     },
 };
 </script>

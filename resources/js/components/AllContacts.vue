@@ -15,13 +15,13 @@ export default {
             contacts.value = await APIController.FetchContacts();
         };
 
-        const removeTableContact = (id) => {
+        const removeContact = (id) => {
             // get removed contact id
             const contactID = contacts.value.findIndex(
                 (contact) => contact.id === id
             );
 
-            // remove contact
+            // remove contact from contacts array
             contacts.value.splice(contactID, 1);
         };
 
@@ -29,7 +29,7 @@ export default {
             loading,
             contacts,
             fetchContacts,
-            removeTableContact,
+            removeContact,
         };
     },
     created() {
@@ -43,6 +43,6 @@ export default {
     <Table
         :contacts="contacts"
         :loading="loading"
-        @removeContact="removeTableContact"
+        @removeContact="removeContact"
     />
 </template>

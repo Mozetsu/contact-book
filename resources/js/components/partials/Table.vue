@@ -1,13 +1,17 @@
 <script>
 import Contact from "./Contact.vue";
+
 export default {
     components: { Contact },
     props: ["contacts", "loading"],
     emits: ["removeContact"],
-    methods: {
-        log(id) {
-            this.$emit("removeContact", id);
-        },
+    setup(setup, context) {
+        // custom event handler
+        const removeContact = (id) => context.emit("removeContact", id);
+
+        return {
+            removeContact,
+        };
     },
 };
 </script>
@@ -59,7 +63,7 @@ export default {
                 <Contact
                     v-if="!loading && contacts.length"
                     :contacts="contacts"
-                    @removeContact="log"
+                    @removeContact="removeContact"
                 />
             </tbody>
         </table>

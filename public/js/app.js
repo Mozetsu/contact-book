@@ -15417,11 +15417,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
     }();
 
-    var removeTableContact = function removeTableContact(id) {
+    var removeContact = function removeContact(id) {
       // get removed contact id
       var contactID = contacts.value.findIndex(function (contact) {
         return contact.id === id;
-      }); // remove contact
+      }); // remove contact from contacts array
 
       contacts.value.splice(contactID, 1);
     };
@@ -15430,7 +15430,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loading: loading,
       contacts: contacts,
       fetchContacts: fetchContacts,
-      removeTableContact: removeTableContact
+      removeContact: removeContact
     };
   },
   created: function created() {
@@ -15507,9 +15507,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ["contacts"],
   emits: ["removeContact"],
-  methods: {
-    deleteContact: function () {
-      var _deleteContact = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id) {
+  setup: function setup(props, context) {
+    var deleteContact = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id) {
         var success;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
@@ -15520,22 +15520,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 success = _context.sent;
-                if (success) this.$emit("removeContact", id);
+                if (success) context.emit("removeContact", id);
 
               case 4:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee);
       }));
 
-      function deleteContact(_x) {
-        return _deleteContact.apply(this, arguments);
-      }
+      return function deleteContact(_x) {
+        return _ref.apply(this, arguments);
+      };
+    }();
 
-      return deleteContact;
-    }()
+    return {
+      deleteContact: deleteContact
+    };
   }
 });
 
@@ -15703,10 +15705,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: ["contacts", "loading"],
   emits: ["removeContact"],
-  methods: {
-    log: function log(id) {
-      this.$emit("removeContact", id);
-    }
+  setup: function setup(_setup, context) {
+    // custom event handler
+    var removeContact = function removeContact(id) {
+      return context.emit("removeContact", id);
+    };
+
+    return {
+      removeContact: removeContact
+    };
   }
 });
 
@@ -15758,7 +15765,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Table, {
     contacts: $setup.contacts,
     loading: $setup.loading,
-    onRemoveContact: $setup.removeTableContact
+    onRemoveContact: $setup.removeContact
   }, null, 8
   /* PROPS */
   , ["contacts", "loading", "onRemoveContact"]);
@@ -15867,7 +15874,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       onClick: function onClick($event) {
-        return $options.deleteContact(contact.id);
+        return $setup.deleteContact(contact.id);
       },
       "class": "btn btn--clear",
       type: "button",
@@ -16236,7 +16243,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   })])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_8, [_hoisted_9, $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_10, _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && !$props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_13, _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && $props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Contact, {
     key: 2,
     contacts: $props.contacts,
-    onRemoveContact: $options.log
+    onRemoveContact: $setup.removeContact
   }, null, 8
   /* PROPS */
   , ["contacts", "onRemoveContact"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
