@@ -1,0 +1,70 @@
+@use '../base/settings' as *;
+@use '../base/mixins' as *;
+
+.table {
+	width: 100%;
+	color: #333;
+	margin-bottom: auto;
+	border-spacing: 0;
+	position: relative;
+
+	.table__head {
+		text-align: left;
+		position: relative;
+		border-bottom: 1px solid $border-color;
+	}
+
+	.table__head::after {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 0.5px;
+		background-color: $border-color;
+	}
+
+	.table__content {
+		padding: 2.5rem 3rem;
+
+		#search-bar {
+			@include input;
+			max-height: 45px;
+			max-width: 30rem;
+			overflow: hidden;
+			border-radius: $border-radius;
+		}
+	}
+
+	.table__body {
+		.table__row {
+			.controls {
+				display: flex;
+				justify-content: flex-end;
+
+				:nth-child(2) {
+					margin-left: 0.5rem;
+				}
+			}
+		}
+
+		.table__row:nth-child(even) {
+			background-color: #f8f8f8;
+		}
+
+		.table__filters {
+			color: rgba($color: #000000, $alpha: 0.4);
+			padding: 1.5rem 3rem;
+		}
+	}
+
+	.empty-table {
+		width: 100%;
+		min-height: 10rem;
+		text-align: center;
+		padding: 6rem;
+
+		h3 {
+			column-span: 5;
+			margin-bottom: 2rem;
+		}
+	}
+}

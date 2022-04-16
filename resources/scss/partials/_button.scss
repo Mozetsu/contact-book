@@ -1,0 +1,39 @@
+@use '../base/settings' as *;
+
+.btn {
+	width: 100%;
+	border: none;
+	border-radius: $border-radius;
+	padding: 1.5rem;
+	max-height: 45px;
+	font-size: 1.4rem;
+}
+
+.btn--primary {
+	background-color: $color--primary;
+	color: #ffffff;
+}
+
+.btn--secondary {
+	background-color: $color--secondary;
+	color: #ffffff;
+}
+
+.btn--clear {
+	background-color: transparent;
+	color: #888;
+}
+
+@media only screen and (min-width: 600px) {
+	.btn {
+		cursor: pointer;
+	}
+
+	.btn--secondary:hover {
+		background-color: lighten($color: $color--secondary, $amount: 5);
+	}
+
+	.btn--clear:hover {
+		color: darken($color: #555, $amount: 20);
+	}
+}

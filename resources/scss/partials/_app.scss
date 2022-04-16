@@ -1,0 +1,48 @@
+@use '../base/mixins' as *;
+
+#app {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	height: 100%;
+	padding: 2rem;
+	font-size: 1.6rem;
+	overflow: auto;
+
+	.hero {
+		width: 100%;
+		text-align: center;
+		margin: 3rem 0 5rem 0;
+	}
+
+	.hero__title {
+		text-transform: uppercase;
+		font-weight: 900;
+		font-size: 4rem;
+		color: #333;
+		margin-bottom: 1rem;
+	}
+
+	.hero__subheading {
+		margin-bottom: 2rem;
+		width: 100%;
+		text-align: center;
+		font-weight: normal;
+
+		.subheading {
+			font-size: 2rem;
+		}
+	}
+
+	.container {
+		@include container;
+	}
+
+	footer {
+		margin: 4rem 0 0.5rem 0;
+		width: 100%;
+		text-align: center;
+	}
+}

@@ -1,0 +1,302 @@
+@import url(https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap);
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  height: 100vh;
+  font-family: "Roboto", sans-serif;
+}
+
+.stretch {
+  width: 100%;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100%;
+  padding: 2rem;
+  font-size: 1.6rem;
+  overflow: auto;
+}
+#app .hero {
+  width: 100%;
+  text-align: center;
+  margin: 3rem 0 5rem 0;
+}
+#app .hero__title {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 4rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+#app .hero__subheading {
+  margin-bottom: 2rem;
+  width: 100%;
+  text-align: center;
+  font-weight: normal;
+}
+#app .hero__subheading .subheading {
+  font-size: 2rem;
+}
+#app .container {
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #333;
+  margin-bottom: auto;
+  max-width: 90rem;
+  overflow-x: auto;
+  width: 100%;
+}
+#app footer {
+  margin: 4rem 0 0.5rem 0;
+  width: 100%;
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+  border: none;
+  border-radius: 3px;
+  padding: 1.5rem;
+  max-height: 45px;
+  font-size: 1.4rem;
+}
+
+.btn--primary {
+  background-color: #333;
+  color: #ffffff;
+}
+
+.btn--secondary {
+  background-color: #69b1e8;
+  color: #ffffff;
+}
+
+.btn--clear {
+  background-color: transparent;
+  color: #888;
+}
+
+@media only screen and (min-width: 600px) {
+  .btn {
+    cursor: pointer;
+  }
+
+  .btn--secondary:hover {
+    background-color: #7fbceb;
+  }
+
+  .btn--clear:hover {
+    color: #222222;
+  }
+}
+.form {
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #333;
+  margin-bottom: auto;
+  max-width: 90rem;
+  overflow-x: auto;
+  width: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  max-width: 50rem;
+  overflow-x: unset;
+}
+.form .form__input {
+  width: 100%;
+}
+.form .form__input .input-container {
+  margin: 1rem 0 1.5rem 0;
+}
+.form .form__input .input-container label {
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  opacity: 0.8;
+  letter-spacing: 1px;
+}
+.form .form__input .input-container .input {
+  padding: 2rem 1.5rem;
+  font-size: 1.4rem;
+  outline: 0;
+  border-radius: 3px;
+  border: 0;
+  background-color: #f8f8f8;
+  width: 100%;
+  letter-spacing: 1px;
+  margin: 1rem 0 0.5rem 0;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  max-height: 45px;
+}
+.form .form__input .input-container .input :active {
+  border: 2.5px solid #333;
+}
+.form .form__input .input-container .input ::-moz-placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #808080;
+  opacity: 1;
+  /* Firefox */
+}
+.form .form__input .input-container .input :-ms-input-placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #808080;
+  opacity: 1;
+  /* Firefox */
+}
+.form .form__input .input-container .input ::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #808080;
+  opacity: 1;
+  /* Firefox */
+}
+.form .form__input .input-container .input :-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #808080;
+}
+.form .form__input .input-container .input ::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #808080;
+}
+.form .form__input .input-container .input :focus {
+  background-color: #eaeaea;
+}
+.form .form__input .input-container .input:focus {
+  border: 2px solid #69b1e8;
+  background-color: #f7fafc;
+}
+.form .form__input .input-container .input:not(:-moz-placeholder-shown) {
+  background-color: #f7fafc;
+}
+.form .form__input .input-container .input:not(:-ms-input-placeholder) {
+  background-color: #f7fafc;
+}
+.form .form__input .input-container .input:not(:placeholder-shown) {
+  background-color: #f7fafc;
+}
+.form .form__input .input-container .error {
+  color: #d67373;
+  font-size: 1.4rem;
+}
+.form .form__submit {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.form .form__submit input {
+  letter-spacing: 1px;
+}
+
+.table {
+  width: 100%;
+  color: #333;
+  margin-bottom: auto;
+  border-spacing: 0;
+  position: relative;
+}
+.table .table__head {
+  text-align: left;
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.table .table__head::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 0.5px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.table .table__content {
+  padding: 2.5rem 3rem;
+}
+.table .table__content #search-bar {
+  padding: 2rem 1.5rem;
+  font-size: 1.4rem;
+  outline: 0;
+  border-radius: 3px;
+  border: 0;
+  background-color: #f8f8f8;
+  width: 100%;
+  max-height: 45px;
+  max-width: 30rem;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.table .table__content #search-bar :active {
+  border: 2.5px solid #333;
+}
+.table .table__content #search-bar ::-moz-placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #808080;
+  opacity: 1;
+  /* Firefox */
+}
+.table .table__content #search-bar :-ms-input-placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #808080;
+  opacity: 1;
+  /* Firefox */
+}
+.table .table__content #search-bar ::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #808080;
+  opacity: 1;
+  /* Firefox */
+}
+.table .table__content #search-bar :-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #808080;
+}
+.table .table__content #search-bar ::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #808080;
+}
+.table .table__content #search-bar :focus {
+  background-color: #eaeaea;
+}
+.table .table__body .table__row .controls {
+  display: flex;
+  justify-content: flex-end;
+}
+.table .table__body .table__row .controls :nth-child(2) {
+  margin-left: 0.5rem;
+}
+.table .table__body .table__row:nth-child(even) {
+  background-color: #f8f8f8;
+}
+.table .table__body .table__filters {
+  color: rgba(0, 0, 0, 0.4);
+  padding: 1.5rem 3rem;
+}
+.table .empty-table {
+  width: 100%;
+  min-height: 10rem;
+  text-align: center;
+  padding: 6rem;
+}
+.table .empty-table h3 {
+  -moz-column-span: 5;
+       column-span: 5;
+  margin-bottom: 2rem;
+}
