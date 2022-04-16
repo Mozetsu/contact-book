@@ -1,6 +1,6 @@
 import AllContacts from "../components/AllContacts.vue";
-import AddContact from "../components/AddContact.vue";
-import EditContact from "../components/EditContact.vue";
+import CreateContact from "../components/CreateContact.vue";
+import UpdateContact from "../components/UpdateContact.vue";
 
 export const routes = [
     {
@@ -9,13 +9,13 @@ export const routes = [
         component: AllContacts,
     },
     {
-        name: "add",
-        path: "/add",
-        component: AddContact,
+        name: "create",
+        path: "/create",
+        component: CreateContact,
     },
     {
-        name: "edit",
-        path: "/edit/:id",
-        component: EditContact,
+        name: "update",
+        path: "/update/:id",
+        component: UpdateContact,
     },
 ];

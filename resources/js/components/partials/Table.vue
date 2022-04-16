@@ -23,7 +23,7 @@ export default {
                         />
                     </th>
                     <th class="table__content flex">
-                        <router-link to="/add">
+                        <router-link to="/create">
                             <input
                                 class="btn btn--primary"
                                 type="button"

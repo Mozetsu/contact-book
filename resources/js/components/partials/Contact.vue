@@ -12,7 +12,9 @@ export default {
         <td class="table__content">{{ contact.country }}</td>
         <td class="table__content controls">
             <input class="btn btn--clear" type="button" value="Delete" />
-            <input class="btn btn--secondary" type="button" value="Edit" />
+            <router-link class="stretch" :to="`/update/${contact.id}`">
+                <input class="btn btn--secondary" type="button" value="Edit" />
+            </router-link>
         </td>
     </tr>
 </template>

@@ -1,88 +1,63 @@
 <script setup>
-import { ref } from "vue";
+import { defineProps, onMounted, reactive, ref, toRefs } from "vue";
 import { useRouter } from "vue-router";
+import { validateForm, populateForm } from "../../helpers";
 import APIController from "../../controllers/api";
 
 const router = useRouter();
 
-const form = ref({
+const props = defineProps({
+    action: String,
+});
+
+const { action } = toRefs(props);
+const contactID = window.location.pathname.split("/")[2];
+
+const form = reactive({
     name: "",
     email: "",
     phone: "",
     country: "",
 });
 
-const errors = ref({
+const errors = reactive({
     name: "",
     email: "",
     phone: "",
     country: "",
 });
 
-const validateForm = async () => {
-    // remove multiple whitespaces from strings
-    form.value.name = form.value.name
-        .toLowerCase()
-        .replace(/\s\s+/g, " ")
-        .trim();
+onMounted(() => {
+    if (action.value === "UPDATE") populateForm(form, contactID);
+});
 
-    form.value.email = form.value.email.toLowerCase();
+const handleFormSubmit = async () => {
+    const isValidForm = validateForm(form, errors);
 
-    form.value.country = form.value.country
-        .toLowerCase()
-        .replace(/\s\s+/g, " ")
-        .trim();
+    if (!isValidForm) return;
 
-    const { name, phone, country } = form.value;
+    const contact = JSON.stringify(form);
 
-    // regex
-    const regexNumbers = /^[0-9]{9}$/;
-    const regexSingleString = /[a-z]/gi;
-    const regexStringWhitespace = /[a-z]+[ ]/gi;
+    // create new contact
+    if (action.value === "CREATE") {
+        const { success } = await APIController.CreateContact(contact);
+        if (success) router.push("/");
+    }
 
-    // validate string fields
-    const isValidField = (field) => {
-        return (
-            field.length === 0 || // empty string
-            field.match(/[0-9]/g) || // match numbers
-            (!field.match(regexSingleString) &&
-                !field.match(regexStringWhitespace)) // does not match letters only
+    // update contact
+    if (action.value === "UPDATE") {
+        const { success } = await APIController.UpdateContact(
+            contact,
+            contactID
         );
-    };
 
-    // validate name
-    if (isValidField(name)) {
-        const msg = "Name cannot be empty, and must contain only letters.";
-        return (errors.value.name = msg);
+        if (success) router.push("/");
     }
-
-    // validate phone number
-    if (phone.length === 0 || !regexNumbers.test(phone.toString())) {
-        const msg = "Number provided does not match 9xx xxx xxx format.";
-        return (errors.value.phone = msg);
-    }
-
-    // validate country
-    if (isValidField(country)) {
-        const msg = "Country cannot be empty, and must contain only letters.";
-        return (errors.value.country = msg);
-    }
-
-    errors.value = {
-        name: "",
-        email: "",
-        phone: "",
-        country: "",
-    };
-
-    const contact = JSON.stringify(form.value);
-    const { success } = await APIController.AddContact(contact);
-
-    if (success) router.push("/");
 };
 </script>
+
 <template>
-    <form class="form" @submit.prevent="validateForm()">
+    <form class="form" @submit.prevent="handleFormSubmit(action)">
         <section class="form__input">
             <div class="input-container">
                 <label for="name">Name</label>
