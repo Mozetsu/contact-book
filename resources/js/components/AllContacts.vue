@@ -40,9 +40,5 @@ export default {
 </script>
 
 <template>
-    <Table
-        :contacts="contacts"
-        :loading="loading"
-        @removeContact="removeContact"
-    />
+    <Table :contacts="contacts" :loading="loading" />
 </template>

@@ -1,17 +1,15 @@
 <script setup>
-import { defineProps, onMounted, reactive, toRefs } from "vue";
-import { useRouter } from "vue-router";
-import { validateForm, populateForm } from "../../helpers";
+import { reactive } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import APIController from "../../controllers/api";
+import { validateForm, populateForm } from "../../helpers";
 
 const router = useRouter();
 
-const props = defineProps({
-    action: String,
-});
+const action = window.location.pathname.split("/")[1].toUpperCase();
+const contactID = useRoute().query.contact;
 
-const { action } = toRefs(props);
-const contactID = window.location.pathname.split("/")[2];
+// const changedFields = ref([]);
 
 const form = reactive({
     name: "",
@@ -27,25 +25,30 @@ const errors = reactive({
     country: "",
 });
 
-onMounted(() => {
-    if (action.value === "UPDATE") populateForm(form, contactID);
-});
+if (action === "UPDATE") {
+    populateForm(form, contactID);
+}
+
+// watch for all the input fields that have changed
+const handleFieldChange = (event) => {
+    console.log(event.target);
+};
 
 const handleFormSubmit = async () => {
     const isValidForm = validateForm(form, errors);
-
     if (!isValidForm) return;
-
-    const contact = JSON.stringify(form);
+    let contact = null;
 
     // create new contact
-    if (action.value === "CREATE") {
+    if (action === "CREATE") {
+        contact = JSON.stringify(form);
         const { success } = await APIController.CreateContact(contact);
         if (success) router.push("/");
     }
 
     // update contact
-    if (action.value === "UPDATE") {
+    if (action === "UPDATE") {
+        contact = JSON.stringify(form);
         const { success } = await APIController.UpdateContact(
             contact,
             contactID
@@ -53,6 +56,10 @@ const handleFormSubmit = async () => {
 
         if (success) router.push("/");
     }
+    return {
+        handleFieldChange,
+        handleFormSubmit,
+    };
 };
 </script>
 
@@ -62,6 +69,7 @@ const handleFormSubmit = async () => {
             <div class="input-container">
                 <label for="name">Name</label>
                 <input
+                    @change="handleFieldChange"
                     required
                     class="input"
                     id="name"
@@ -75,6 +83,7 @@ const handleFormSubmit = async () => {
             <div class="input-container">
                 <label for="email">Email</label>
                 <input
+                    @change="handleFieldChange"
                     required
                     class="input"
                     id="email"
@@ -88,6 +97,7 @@ const handleFormSubmit = async () => {
             <div class="input-container">
                 <label for="phone">Phone</label>
                 <input
+                    @change="handleFieldChange"
                     required
                     class="input"
                     id="phone"
@@ -101,6 +111,7 @@ const handleFormSubmit = async () => {
             <div class="input-container">
                 <label for="country">Country</label>
                 <input
+                    @change="handleFieldChange"
                     required
                     class="input"
                     id="country"

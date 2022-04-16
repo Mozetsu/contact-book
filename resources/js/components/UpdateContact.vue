@@ -6,5 +6,5 @@ export default {
 </script>
 
 <template>
-    <Form action="UPDATE" />
+    <Form />
 </template>

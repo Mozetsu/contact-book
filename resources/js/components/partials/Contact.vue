@@ -2,7 +2,7 @@
 import APIController from "../../controllers/api";
 
 export default {
-    props: ["contacts"],
+    props: ["contacts", "currentContact"],
     emits: ["removeContact"],
     setup(props, context) {
         const deleteContact = async (id) => {
@@ -30,7 +30,7 @@ export default {
                 type="button"
                 value="Delete"
             />
-            <router-link class="stretch" :to="`/update/${contact.id}`">
+            <router-link class="stretch" :to="`/update?contact=${contact.id}`">
                 <input class="btn btn--secondary" type="button" value="Edit" />
             </router-link>
         </td>

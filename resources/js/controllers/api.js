@@ -22,6 +22,7 @@ export default {
             API_BASE + `contacts/update/${id}`,
             body
         );
+        console.log(data);
         if (!data.success) throw data.response.error;
         return data;
     },

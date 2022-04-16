@@ -15505,7 +15505,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["contacts"],
+  props: ["contacts", "currentContact"],
   emits: ["removeContact"],
   setup: function setup(props, context) {
     var deleteContact = /*#__PURE__*/function () {
@@ -15558,8 +15558,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers */ "./resources/js/helpers/index.js");
-/* harmony import */ var _controllers_api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../controllers/api */ "./resources/js/controllers/api.js");
+/* harmony import */ var _controllers_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../controllers/api */ "./resources/js/controllers/api.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../helpers */ "./resources/js/helpers/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -15571,19 +15571,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {
-    action: String
-  },
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
     expose();
-    var props = __props;
     var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_4__.useRouter)();
+    var action = window.location.pathname.split("/")[1].toUpperCase();
+    var contactID = (0,vue_router__WEBPACK_IMPORTED_MODULE_4__.useRoute)().query.contact; // const changedFields = ref([]);
 
-    var _toRefs = (0,vue__WEBPACK_IMPORTED_MODULE_1__.toRefs)(props),
-        action = _toRefs.action;
-
-    var contactID = window.location.pathname.split("/")[2];
     var form = (0,vue__WEBPACK_IMPORTED_MODULE_1__.reactive)({
       name: "",
       email: "",
@@ -15596,9 +15590,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       phone: "",
       country: ""
     });
-    (0,vue__WEBPACK_IMPORTED_MODULE_1__.onMounted)(function () {
-      if (action.value === "UPDATE") (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.populateForm)(form, contactID);
-    });
+
+    if (action === "UPDATE") {
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.populateForm)(form, contactID);
+    } // watch for all the input fields that have changed
+
+
+    var handleFieldChange = function handleFieldChange(event) {
+      console.log(event.target);
+    };
 
     var handleFormSubmit = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -15608,7 +15608,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                isValidForm = (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.validateForm)(form, errors);
+                isValidForm = (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.validateForm)(form, errors);
 
                 if (isValidForm) {
                   _context.next = 3;
@@ -15618,36 +15618,44 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context.abrupt("return");
 
               case 3:
-                contact = JSON.stringify(form); // create new contact
+                contact = null; // create new contact
 
-                if (!(action.value === "CREATE")) {
-                  _context.next = 10;
+                if (!(action === "CREATE")) {
+                  _context.next = 11;
                   break;
                 }
 
-                _context.next = 7;
-                return _controllers_api__WEBPACK_IMPORTED_MODULE_3__["default"].CreateContact(contact);
+                contact = JSON.stringify(form);
+                _context.next = 8;
+                return _controllers_api__WEBPACK_IMPORTED_MODULE_2__["default"].CreateContact(contact);
 
-              case 7:
+              case 8:
                 _yield$APIController$ = _context.sent;
                 success = _yield$APIController$.success;
                 if (success) router.push("/");
 
-              case 10:
-                if (!(action.value === "UPDATE")) {
-                  _context.next = 16;
+              case 11:
+                if (!(action === "UPDATE")) {
+                  _context.next = 18;
                   break;
                 }
 
-                _context.next = 13;
-                return _controllers_api__WEBPACK_IMPORTED_MODULE_3__["default"].UpdateContact(contact, contactID);
+                contact = JSON.stringify(form);
+                _context.next = 15;
+                return _controllers_api__WEBPACK_IMPORTED_MODULE_2__["default"].UpdateContact(contact, contactID);
 
-              case 13:
+              case 15:
                 _yield$APIController$2 = _context.sent;
                 _success = _yield$APIController$2.success;
                 if (_success) router.push("/");
 
-              case 16:
+              case 18:
+                return _context.abrupt("return", {
+                  handleFieldChange: handleFieldChange,
+                  handleFormSubmit: handleFormSubmit
+                });
+
+              case 19:
               case "end":
                 return _context.stop();
             }
@@ -15662,19 +15670,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
     var __returned__ = {
       router: router,
-      props: props,
       action: action,
       contactID: contactID,
       form: form,
       errors: errors,
+      handleFieldChange: handleFieldChange,
       handleFormSubmit: handleFormSubmit,
-      onMounted: vue__WEBPACK_IMPORTED_MODULE_1__.onMounted,
       reactive: vue__WEBPACK_IMPORTED_MODULE_1__.reactive,
-      toRefs: vue__WEBPACK_IMPORTED_MODULE_1__.toRefs,
       useRouter: vue_router__WEBPACK_IMPORTED_MODULE_4__.useRouter,
-      validateForm: _helpers__WEBPACK_IMPORTED_MODULE_2__.validateForm,
-      populateForm: _helpers__WEBPACK_IMPORTED_MODULE_2__.populateForm,
-      APIController: _controllers_api__WEBPACK_IMPORTED_MODULE_3__["default"]
+      useRoute: vue_router__WEBPACK_IMPORTED_MODULE_4__.useRoute,
+      APIController: _controllers_api__WEBPACK_IMPORTED_MODULE_2__["default"],
+      validateForm: _helpers__WEBPACK_IMPORTED_MODULE_3__.validateForm,
+      populateForm: _helpers__WEBPACK_IMPORTED_MODULE_3__.populateForm
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -15703,10 +15710,10 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Contact: _Contact_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ["contacts", "loading"],
+  props: ["contacts", "loading", "currentContact", "currentContact"],
   emits: ["removeContact"],
-  setup: function setup(_setup, context) {
-    // custom event handler
+  setup: function setup(props, context) {
+    // custom event handlers
     var removeContact = function removeContact(id) {
       return context.emit("removeContact", id);
     };
@@ -15764,11 +15771,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Table, {
     contacts: $setup.contacts,
-    loading: $setup.loading,
-    onRemoveContact: $setup.removeContact
+    loading: $setup.loading
   }, null, 8
   /* PROPS */
-  , ["contacts", "loading", "onRemoveContact"]);
+  , ["contacts", "loading"]);
 }
 
 /***/ }),
@@ -15789,9 +15795,62 @@ __webpack_require__.r(__webpack_exports__);
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Form");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form, {
-    action: "CREATE"
-  });
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form);
+}
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a":
+/*!******************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "container"
+};
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", {
+  "class": "hero"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
+  "class": "hero__title"
+}, "404"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Oops, looks like you're lost...")], -1
+/* HOISTED */
+);
+
+var _hoisted_3 = {
+  style: {
+    "width": "100%",
+    "padding": "2rem"
+  }
+};
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  "class": "btn btn--primary"
+}, "Home", -1
+/* HOISTED */
+);
+
+function render(_ctx, _cache) {
+  var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
+
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("section", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_4];
+    }),
+    _: 1
+    /* STABLE */
+
+  })])]);
 }
 
 /***/ }),
@@ -15812,9 +15871,7 @@ __webpack_require__.r(__webpack_exports__);
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Form");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form, {
-    action: "UPDATE"
-  });
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form);
 }
 
 /***/ }),
@@ -15883,7 +15940,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* PROPS */
     , _hoisted_6), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
       "class": "stretch",
-      to: "/update/".concat(contact.id)
+      to: "/update?contact=".concat(contact.id)
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
         return [_hoisted_7];
@@ -16025,6 +16082,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $setup.handleFormSubmit($setup.action);
     }, ["prevent"]))
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    onChange: $setup.handleFieldChange,
     required: "",
     "class": "input",
     id: "name",
@@ -16034,11 +16092,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $setup.form.name = $event;
     })
-  }, null, 512
-  /* NEED_PATCH */
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.name]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.errors.name), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    onChange: $setup.handleFieldChange,
     required: "",
     "class": "input",
     id: "email",
@@ -16048,11 +16107,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $setup.form.email = $event;
     })
-  }, null, 512
-  /* NEED_PATCH */
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.email]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.errors.email), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    onChange: $setup.handleFieldChange,
     required: "",
     "class": "input",
     id: "phone",
@@ -16062,11 +16122,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $setup.form.phone = $event;
     })
-  }, null, 512
-  /* NEED_PATCH */
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.phone]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.errors.phone), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    onChange: $setup.handleFieldChange,
     required: "",
     "class": "input",
     id: "country",
@@ -16076,8 +16137,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
       return $setup.form.country = $event;
     })
-  }, null, 512
-  /* NEED_PATCH */
+  }, null, 544
+  /* HYDRATE_EVENTS, NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.country]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.errors.country), 1
   /* TEXT */
   )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
@@ -16242,11 +16303,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   })])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_8, [_hoisted_9, $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_10, _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && !$props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_13, _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && $props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Contact, {
     key: 2,
-    contacts: $props.contacts,
-    onRemoveContact: $setup.removeContact
+    contacts: $props.contacts
   }, null, 8
   /* PROPS */
-  , ["contacts", "onRemoveContact"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
+  , ["contacts"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
 }
 
 /***/ }),
@@ -16464,18 +16524,19 @@ var API_BASE = "http://127.0.0.1:8000/api/";
             case 2:
               _yield$axios$put = _context4.sent;
               data = _yield$axios$put.data;
+              console.log(data);
 
               if (data.success) {
-                _context4.next = 6;
+                _context4.next = 7;
                 break;
               }
 
               throw data.response.error;
 
-            case 6:
+            case 7:
               return _context4.abrupt("return", data);
 
-            case 7:
+            case 8:
             case "end":
               return _context4.stop();
           }
@@ -16718,6 +16779,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_AllContacts_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/AllContacts.vue */ "./resources/js/components/AllContacts.vue");
 /* harmony import */ var _components_CreateContact_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/CreateContact.vue */ "./resources/js/components/CreateContact.vue");
 /* harmony import */ var _components_UpdateContact_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/UpdateContact.vue */ "./resources/js/components/UpdateContact.vue");
+/* harmony import */ var _components_NotFound_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/NotFound.vue */ "./resources/js/components/NotFound.vue");
+
 
 
 
@@ -16731,8 +16794,12 @@ var routes = [{
   component: _components_CreateContact_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
 }, {
   name: "update",
-  path: "/update/:id",
+  path: "/update",
   component: _components_UpdateContact_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+}, {
+  name: "404",
+  path: "/:pathMatch(.*)*",
+  component: _components_NotFound_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
 }];
 
 /***/ }),
@@ -35026,6 +35093,32 @@ if (false) {}
 
 /***/ }),
 
+/***/ "./resources/js/components/NotFound.vue":
+/*!**********************************************!*\
+  !*** ./resources/js/components/NotFound.vue ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _NotFound_vue_vue_type_template_id_2ce50e5a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NotFound.vue?vue&type=template&id=2ce50e5a */ "./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a");
+/* harmony import */ var E_Dev_Projects_contact_book_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+const script = {}
+
+;
+const __exports__ = /*#__PURE__*/(0,E_Dev_Projects_contact_book_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_NotFound_vue_vue_type_template_id_2ce50e5a__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/NotFound.vue"]])
+/* hot reload */
+if (false) {}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
 /***/ "./resources/js/components/UpdateContact.vue":
 /*!***************************************************!*\
   !*** ./resources/js/components/UpdateContact.vue ***!
@@ -35346,6 +35439,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_CreateContact_vue_vue_type_template_id_20390129__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_CreateContact_vue_vue_type_template_id_20390129__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./CreateContact.vue?vue&type=template&id=20390129 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/CreateContact.vue?vue&type=template&id=20390129");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_NotFound_vue_vue_type_template_id_2ce50e5a__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_NotFound_vue_vue_type_template_id_2ce50e5a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./NotFound.vue?vue&type=template&id=2ce50e5a */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/NotFound.vue?vue&type=template&id=2ce50e5a");
 
 
 /***/ }),

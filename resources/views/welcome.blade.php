@@ -6,9 +6,9 @@
         <meta name="csrf-token" value="{{ csrf_token() }}"/>
         <title>Contact Book</title>
         <link href="{{ 'css/app.css' }}" type="text/css" rel="stylesheet"/>
-        <script defer src="{{ 'js/app.js' }}" type="module"></script>
     </head>
     <body>
         <div id="app"></div>
+        <script src="{{ 'js/app.js' }}" type="module"></script>
     </body>
 </html>

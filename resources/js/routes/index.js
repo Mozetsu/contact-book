@@ -1,6 +1,7 @@
 import AllContacts from "../components/AllContacts.vue";
 import CreateContact from "../components/CreateContact.vue";
 import UpdateContact from "../components/UpdateContact.vue";
+import NotFound from "../components/NotFound.vue";
 
 export const routes = [
     {
@@ -15,7 +16,12 @@ export const routes = [
     },
     {
         name: "update",
-        path: "/update/:id",
+        path: "/update",
         component: UpdateContact,
+    },
+    {
+        name: "404",
+        path: "/:pathMatch(.*)*",
+        component: NotFound,
     },
 ];
