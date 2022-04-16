@@ -15385,7 +15385,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "AllContacts",
   components: {
     Table: _partials_Table_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
@@ -15418,10 +15417,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
     }();
 
+    var removeTableContact = function removeTableContact(id) {
+      // get removed contact id
+      var contactID = contacts.value.findIndex(function (contact) {
+        return contact.id === id;
+      }); // remove contact
+
+      contacts.value.splice(contactID, 1);
+    };
+
     return {
       loading: loading,
       contacts: contacts,
-      fetchContacts: fetchContacts
+      fetchContacts: fetchContacts,
+      removeTableContact: removeTableContact
     };
   },
   created: function created() {
@@ -15485,8 +15494,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _controllers_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../controllers/api */ "./resources/js/controllers/api.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["contacts"]
+  props: ["contacts"],
+  emits: ["removeContact"],
+  methods: {
+    deleteContact: function () {
+      var _deleteContact = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id) {
+        var success;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _controllers_api__WEBPACK_IMPORTED_MODULE_1__["default"].DeleteContact(id);
+
+              case 2:
+                success = _context.sent;
+                if (success) this.$emit("removeContact", id);
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function deleteContact(_x) {
+        return _deleteContact.apply(this, arguments);
+      }
+
+      return deleteContact;
+    }()
+  }
 });
 
 /***/ }),
@@ -15618,7 +15668,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handleFormSubmit: handleFormSubmit,
       onMounted: vue__WEBPACK_IMPORTED_MODULE_1__.onMounted,
       reactive: vue__WEBPACK_IMPORTED_MODULE_1__.reactive,
-      ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref,
       toRefs: vue__WEBPACK_IMPORTED_MODULE_1__.toRefs,
       useRouter: vue_router__WEBPACK_IMPORTED_MODULE_4__.useRouter,
       validateForm: _helpers__WEBPACK_IMPORTED_MODULE_2__.validateForm,
@@ -15649,11 +15698,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Contact_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Contact.vue */ "./resources/js/components/partials/Contact.vue");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "Table",
   components: {
     Contact: _Contact_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ["contacts", "loading"]
+  props: ["contacts", "loading"],
+  emits: ["removeContact"],
+  methods: {
+    log: function log(id) {
+      this.$emit("removeContact", id);
+    }
+  }
 });
 
 /***/ }),
@@ -15703,10 +15757,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Table, {
     contacts: $setup.contacts,
-    loading: $setup.loading
+    loading: $setup.loading,
+    onRemoveContact: $setup.removeTableContact
   }, null, 8
   /* PROPS */
-  , ["contacts", "loading"]);
+  , ["contacts", "loading", "onRemoveContact"]);
 }
 
 /***/ }),
@@ -15785,14 +15840,7 @@ var _hoisted_4 = {
 var _hoisted_5 = {
   "class": "table__content controls"
 };
-
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-  "class": "btn btn--clear",
-  type: "button",
-  value: "Delete"
-}, null, -1
-/* HOISTED */
-);
+var _hoisted_6 = ["onClick"];
 
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
   "class": "btn btn--secondary",
@@ -15817,7 +15865,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(contact.country), 1
     /* TEXT */
-    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, [_hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      onClick: function onClick($event) {
+        return $options.deleteContact(contact.id);
+      },
+      "class": "btn btn--clear",
+      type: "button",
+      value: "Delete"
+    }, null, 8
+    /* PROPS */
+    , _hoisted_6), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
       "class": "stretch",
       to: "/update/".concat(contact.id)
     }, {
@@ -16178,10 +16235,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   })])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_8, [_hoisted_9, $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_10, _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && !$props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_13, _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && $props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Contact, {
     key: 2,
-    contacts: $props.contacts
+    contacts: $props.contacts,
+    onRemoveContact: $options.log
   }, null, 8
   /* PROPS */
-  , ["contacts"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
+  , ["contacts", "onRemoveContact"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
 }
 
 /***/ }),
@@ -16196,7 +16254,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
-/* harmony import */ var _routes_routes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes/routes */ "./resources/js/routes/routes.js");
+/* harmony import */ var _routes_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes/index */ "./resources/js/routes/index.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 /* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
@@ -16207,7 +16265,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_3__.createRouter)({
   history: (0,vue_router__WEBPACK_IMPORTED_MODULE_3__.createWebHistory)(process.env.BASE_URL),
-  routes: _routes_routes__WEBPACK_IMPORTED_MODULE_1__.routes
+  routes: _routes_index__WEBPACK_IMPORTED_MODULE_1__.routes
 });
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)(_App_vue__WEBPACK_IMPORTED_MODULE_2__["default"]).use(router).mount("#app");
 
@@ -16426,35 +16484,30 @@ var API_BASE = "http://127.0.0.1:8000/api/";
   }(),
   DeleteContact: function () {
     var _DeleteContact = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(id) {
-      var response, data;
+      var _yield$axios$delete, data;
+
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               _context5.next = 2;
-              return fetch(API_BASE + "contacts/:id" + id, {
-                method: "DELETE"
-              });
+              return axios__WEBPACK_IMPORTED_MODULE_1___default()["delete"](API_BASE + "contacts/".concat(id));
 
             case 2:
-              response = _context5.sent;
-              _context5.next = 5;
-              return response.json();
-
-            case 5:
-              data = _context5.sent;
+              _yield$axios$delete = _context5.sent;
+              data = _yield$axios$delete.data;
 
               if (data.success) {
-                _context5.next = 8;
+                _context5.next = 6;
                 break;
               }
 
               throw data.response.error;
 
-            case 8:
-              return _context5.abrupt("return", data.response.contacts);
+            case 6:
+              return _context5.abrupt("return", data.success);
 
-            case 9:
+            case 7:
             case "end":
               return _context5.stop();
           }
@@ -16644,10 +16697,10 @@ var validateForm = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./resources/js/routes/routes.js":
-/*!***************************************!*\
-  !*** ./resources/js/routes/routes.js ***!
-  \***************************************/
+/***/ "./resources/js/routes/index.js":
+/*!**************************************!*\
+  !*** ./resources/js/routes/index.js ***!
+  \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

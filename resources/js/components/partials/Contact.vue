@@ -1,6 +1,15 @@
 <script>
+import APIController from "../../controllers/api";
+
 export default {
     props: ["contacts"],
+    emits: ["removeContact"],
+    methods: {
+        deleteContact: async function (id) {
+            const success = await APIController.DeleteContact(id);
+            if (success) this.$emit("removeContact", id);
+        },
+    },
 };
 </script>
 
@@ -11,7 +20,12 @@ export default {
         <td class="table__content">{{ contact.phone }}</td>
         <td class="table__content">{{ contact.country }}</td>
         <td class="table__content controls">
-            <input class="btn btn--clear" type="button" value="Delete" />
+            <input
+                @click="deleteContact(contact.id)"
+                class="btn btn--clear"
+                type="button"
+                value="Delete"
+            />
             <router-link class="stretch" :to="`/update/${contact.id}`">
                 <input class="btn btn--secondary" type="button" value="Edit" />
             </router-link>

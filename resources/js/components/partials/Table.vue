@@ -1,9 +1,14 @@
 <script>
 import Contact from "./Contact.vue";
 export default {
-    name: "Table",
     components: { Contact },
     props: ["contacts", "loading"],
+    emits: ["removeContact"],
+    methods: {
+        log(id) {
+            this.$emit("removeContact", id);
+        },
+    },
 };
 </script>
 
@@ -54,6 +59,7 @@ export default {
                 <Contact
                     v-if="!loading && contacts.length"
                     :contacts="contacts"
+                    @removeContact="log"
                 />
             </tbody>
         </table>

@@ -47,6 +47,11 @@ class ContactTableSeeder extends Seeder
             'country' => "Japan",
         ]);
 
-        // factory(Contact::class)->times(3)->create();
+        Contact::create([
+            'name' => 'thunder',
+            'email' => 'thunder@domain.io',
+            'phone' => 555555555,
+            'country' => "Sweden",
+        ]);
     }
 }

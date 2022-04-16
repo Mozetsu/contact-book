@@ -26,13 +26,8 @@ export default {
         return data;
     },
     DeleteContact: async (id) => {
-        const response = await fetch(API_BASE + "contacts/:id" + id, {
-            method: "DELETE",
-        });
-        const data = await response.json();
-
+        const { data } = await axios.delete(API_BASE + `contacts/${id}`);
         if (!data.success) throw data.response.error;
-
-        return data.response.contacts;
+        return data.success;
     },
 };
