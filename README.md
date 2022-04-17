@@ -44,21 +44,19 @@ Build a fullstack application where users can manage a list of contacts.
 
 ## Runnning the app locally
 
-Clone repo and install dependencies
+Clone repo and install required dependencies
 
 ```bash
 git clone https://github.com/Mozetsu/contact-book.git
 
 cd contact-book
 
-# install all dependencies
 npm i && composer install
 ```
 
 Rename .env.example file to .env in order for Artisan to generate a new project key
 
 ```bash
-# generate project key
 php artisan key:generate
 ```
 
@@ -73,7 +71,7 @@ DB_PASSWORD=...
 Start Dev server
 
 ```bash
-php artisan serve # Start API
+php artisan serve
 ```
 
 Server will run on `http://localhost:8000`
