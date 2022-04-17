@@ -6,7 +6,7 @@ Full-stack project built with Vue and Laravel.
 
 ## Video Preview
 
-Working app can be viewed at: [Contact Book App](https://vimeo.com/700252853)
+Working app can be viewed at: [Contact Book App](https://vimeo.com/700256502)
 
 <p align="center">
   <img src="./assets/preview.gif" width="100%"/>
