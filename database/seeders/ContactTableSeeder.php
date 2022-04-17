@@ -53,5 +53,12 @@ class ContactTableSeeder extends Seeder
             'phone' => 555555555,
             'country' => "sweden",
         ]);
+
+        Contact::create([
+            'name' => 'dark',
+            'email' => 'dark@domain.io',
+            'phone' => 666666666,
+            'country' => "china",
+        ]);
     }
 }
