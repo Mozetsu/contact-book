@@ -42,7 +42,7 @@ Build a fullstack application where users can manage a list of contacts.
 -   Search bar that queries every field of the list
 -   Built with 💚 and Vue
 
-## Setup local Dev Server
+## Runnning the app locally
 
 Clone repo and install dependencies
 
@@ -53,12 +53,16 @@ cd contact-book
 
 # install all dependencies
 npm i && composer install
+```
 
+Rename .env.example file to .env in order for Artisan to generate a new project key
+
+```bash
 # generate project key
 php artisan key:generate
 ```
 
-Setup database environment varibles
+Update database .env varibles
 
 ```bash
 DB_DATABASE=...
@@ -70,7 +74,6 @@ Start Dev server
 
 ```bash
 php artisan serve # Start API
-npm run watch # compile Vue files on file changes
 ```
 
 Server will run on `http://localhost:8000`
