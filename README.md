@@ -51,7 +51,11 @@ git clone https://github.com/Mozetsu/contact-book.git
 
 cd contact-book
 
-npm i
+# install all dependencies
+npm i && composer install
+
+# generate project key
+php artisan key:generate
 ```
 
 Setup database environment varibles
