@@ -54,7 +54,9 @@ cd contact-book
 npm i && composer install
 ```
 
-Rename .env.example file to .env in order for Artisan to generate a new project key
+Rename **.env.example** file to **.env** in order for Artisan to generate a new project key
+
+`.env.example --> .env`
 
 ```bash
 php artisan key:generate
