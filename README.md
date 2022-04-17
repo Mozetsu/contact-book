@@ -98,7 +98,6 @@ update database .env variables
 DB_HOST=mysql
 DB_DATABASE=contact_book
 DB_USERNAME=root
-DB_PASSWORD=
 ```
 
 Instantiate containers

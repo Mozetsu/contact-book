@@ -12,6 +12,8 @@ services:
             dockerfile: .docker/Dockerfile
         image: "contact-book"
         container_name: app
+        volumes:
+            - ./:/var/www/html
         ports:
             - 8000:80
         networks:
@@ -26,6 +28,7 @@ services:
         environment:
             MYSQL_DATABASE: "contact_book"
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
-            MYSQL_ROOT_PASSWORD: ""
+        volumes:
+            - ./mysql/:/var/lib/mysql:delegated
         networks:
             - app-network
