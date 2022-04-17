@@ -5,7 +5,7 @@
 Full-stack project built with Vue and Laravel.
 
 <p align="center">
-  <img src="./assets/img.png" width="100%"/>
+  <img src="./assets/preview.gif" width="100%"/>
 </p>
 
 ## Objective
