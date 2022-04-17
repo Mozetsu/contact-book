@@ -42,7 +42,9 @@ Build a fullstack application where users can manage a list of contacts.
 -   Search bar that queries every field of the list
 -   Built with 💚 and Vue
 
-## Runnning the app locally
+## Testing the Application
+
+### Setup project
 
 Clone repo and install required dependencies
 
@@ -61,6 +63,8 @@ Rename **.env.example** file to **.env** in order for Artisan to generate a new 
 ```bash
 php artisan key:generate
 ```
+
+### Run project locally
 
 Create a MySQL database with XAMPP or other similar service, and set database .env variables in project
 
@@ -82,6 +86,29 @@ Start Dev server
 
 ```bash
 php artisan serve
+```
+
+Server will run on `http://localhost:8000`
+
+### Run project with Docker
+
+update database .env variables
+
+```bash
+DB_HOST=mysql
+DB_DATABASE=contact_book
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Instantiate containers
+
+```bash
+npm run docker # create containers
+
+npm run migrate # create db tables
+
+npm run seed # populate db tables
 ```
 
 Server will run on `http://localhost:8000`
