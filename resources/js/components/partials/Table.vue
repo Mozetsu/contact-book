@@ -1,15 +1,21 @@
 <script>
+import { reactive } from "@vue/reactivity";
 import Contact from "./Contact.vue";
 
 export default {
     components: { Contact },
-    props: ["contacts", "loading", "currentContact", "currentContact"],
+    props: ["contacts", "loading"],
     emits: ["removeContact"],
     setup(props, context) {
+        const filterContacts = (event) => {
+            console.log(event);
+        };
+
         // custom event handlers
         const removeContact = (id) => context.emit("removeContact", id);
 
         return {
+            filterContacts,
             removeContact,
         };
     },
@@ -29,6 +35,7 @@ export default {
                             id="search-bar"
                             type="text"
                             placeholder="Search contact..."
+                            name="search"
                         />
                     </th>
                     <th class="table__content flex">
@@ -49,19 +56,14 @@ export default {
                     <td class="table__filters">Phone</td>
                     <td class="table__filters">Country</td>
                 </tr>
-                <tr v-if="loading" class="table__row">
-                    <td colspan="5" class="empty-table">
-                        <p>Loading Contacts...</p>
-                    </td>
-                </tr>
-                <tr v-if="!loading && !contacts.length">
+                <tr v-if="!contacts.length">
                     <td colspan="5" class="empty-table">
                         <h3>Looks like there's nothing here</h3>
                         <p>Add a new contact to start</p>
                     </td>
                 </tr>
                 <Contact
-                    v-if="!loading && contacts.length"
+                    v-if="contacts.length"
                     :contacts="contacts"
                     @removeContact="removeContact"
                 />

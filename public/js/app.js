@@ -15394,6 +15394,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
     var fetchContacts = /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var _yield$APIController$, success, response;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -15402,9 +15404,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _controllers_api__WEBPACK_IMPORTED_MODULE_3__["default"].FetchContacts();
 
               case 2:
-                contacts.value = _context.sent;
+                _yield$APIController$ = _context.sent;
+                success = _yield$APIController$.success;
+                response = _yield$APIController$.response;
+                if (success) contacts.value = response.contacts;
 
-              case 3:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -15576,8 +15581,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     expose();
     var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_4__.useRouter)();
     var action = window.location.pathname.split("/")[1].toUpperCase();
-    var contactID = (0,vue_router__WEBPACK_IMPORTED_MODULE_4__.useRoute)().query.contact; // const changedFields = ref([]);
-
+    var contactID = (0,vue_router__WEBPACK_IMPORTED_MODULE_4__.useRoute)().query.contact;
+    var changedFields = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)([]);
     var form = (0,vue__WEBPACK_IMPORTED_MODULE_1__.reactive)({
       name: "",
       email: "",
@@ -15588,74 +15593,112 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       name: "",
       email: "",
       phone: "",
-      country: ""
+      country: "",
+      server: ""
     });
-
-    if (action === "UPDATE") {
-      (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.populateForm)(form, contactID);
-    } // watch for all the input fields that have changed
-
+    if (action === "UPDATE") (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.populateForm)(form, contactID); // watch for all the input fields that have changed
 
     var handleFieldChange = function handleFieldChange(event) {
-      console.log(event.target);
+      var field = event.target.name;
+      var hasField = changedFields.value.includes(field);
+      if (!hasField) changedFields.value.push(field);
     };
 
     var handleFormSubmit = /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var isValidForm, contact, _yield$APIController$, success, _yield$APIController$2, _success;
+        var isValidForm, contact, _yield$APIController$, success, response, errorField, body, _yield$APIController$2, _success, _response, _errorField;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                isValidForm = (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.validateForm)(form, errors);
+                _context.next = 2;
+                return (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.validateForm)(form, errors);
+
+              case 2:
+                isValidForm = _context.sent;
 
                 if (isValidForm) {
-                  _context.next = 3;
+                  _context.next = 5;
                   break;
                 }
 
                 return _context.abrupt("return");
 
-              case 3:
+              case 5:
                 contact = null; // create new contact
 
                 if (!(action === "CREATE")) {
-                  _context.next = 11;
+                  _context.next = 17;
                   break;
                 }
 
                 contact = JSON.stringify(form);
-                _context.next = 8;
+                _context.next = 10;
                 return _controllers_api__WEBPACK_IMPORTED_MODULE_2__["default"].CreateContact(contact);
 
-              case 8:
+              case 10:
                 _yield$APIController$ = _context.sent;
                 success = _yield$APIController$.success;
-                if (success) router.push("/");
+                response = _yield$APIController$.response;
 
-              case 11:
-                if (!(action === "UPDATE")) {
-                  _context.next = 18;
+                if (success) {
+                  _context.next = 16;
                   break;
                 }
 
-                contact = JSON.stringify(form);
-                _context.next = 15;
+                errorField = response.type;
+                return _context.abrupt("return", errors[errorField] = response.error);
+
+              case 16:
+                router.push("/");
+
+              case 17:
+                if (!(action === "UPDATE")) {
+                  _context.next = 32;
+                  break;
+                }
+
+                if (changedFields.value.length) {
+                  _context.next = 20;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 20:
+                body = {};
+                changedFields.value.forEach(function (field) {
+                  body[field] = form[field];
+                });
+                contact = JSON.stringify(body);
+                _context.next = 25;
                 return _controllers_api__WEBPACK_IMPORTED_MODULE_2__["default"].UpdateContact(contact, contactID);
 
-              case 15:
+              case 25:
                 _yield$APIController$2 = _context.sent;
                 _success = _yield$APIController$2.success;
-                if (_success) router.push("/");
+                _response = _yield$APIController$2.response;
 
-              case 18:
+                if (_success) {
+                  _context.next = 31;
+                  break;
+                }
+
+                _errorField = _response.type;
+                return _context.abrupt("return", errors[_errorField] = _response.error);
+
+              case 31:
+                router.push("/");
+
+              case 32:
                 return _context.abrupt("return", {
+                  action: action,
                   handleFieldChange: handleFieldChange,
                   handleFormSubmit: handleFormSubmit
                 });
 
-              case 19:
+              case 33:
               case "end":
                 return _context.stop();
             }
@@ -15672,11 +15715,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       router: router,
       action: action,
       contactID: contactID,
+      changedFields: changedFields,
       form: form,
       errors: errors,
       handleFieldChange: handleFieldChange,
       handleFormSubmit: handleFormSubmit,
       reactive: vue__WEBPACK_IMPORTED_MODULE_1__.reactive,
+      ref: vue__WEBPACK_IMPORTED_MODULE_1__.ref,
       useRouter: vue_router__WEBPACK_IMPORTED_MODULE_4__.useRouter,
       useRoute: vue_router__WEBPACK_IMPORTED_MODULE_4__.useRoute,
       APIController: _controllers_api__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -15706,19 +15751,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Contact_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Contact.vue */ "./resources/js/components/partials/Contact.vue");
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Contact: _Contact_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ["contacts", "loading", "currentContact", "currentContact"],
+  props: ["contacts", "loading"],
   emits: ["removeContact"],
   setup: function setup(props, context) {
-    // custom event handlers
+    var filterContacts = function filterContacts(event) {
+      console.log(event);
+    }; // custom event handlers
+
+
     var removeContact = function removeContact(id) {
       return context.emit("removeContact", id);
     };
 
     return {
+      filterContacts: filterContacts,
       removeContact: removeContact
     };
   }
@@ -16074,6 +16125,9 @@ var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
+var _hoisted_17 = {
+  "class": "error"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
@@ -16152,7 +16206,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  }), _hoisted_16])], 32
+  }), _hoisted_16]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.errors.server), 1
+  /* TEXT */
+  )], 32
   /* HYDRATE_EVENTS */
   );
 }
@@ -16228,7 +16284,8 @@ var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
   id: "search-bar",
   type: "text",
-  placeholder: "Search contact..."
+  placeholder: "Search contact...",
+  name: "search"
 })], -1
 /* HOISTED */
 );
@@ -16264,30 +16321,17 @@ var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_10 = {
-  key: 0,
-  "class": "table__row"
+  key: 0
 };
 
 var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-  colspan: "5",
-  "class": "empty-table"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Loading Contacts...")], -1
-/* HOISTED */
-);
-
-var _hoisted_12 = [_hoisted_11];
-var _hoisted_13 = {
-  key: 1
-};
-
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
   colspan: "5",
   "class": "empty-table"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", null, "Looks like there's nothing here"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Add a new contact to start")], -1
 /* HOISTED */
 );
 
-var _hoisted_15 = [_hoisted_14];
+var _hoisted_12 = [_hoisted_11];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
 
@@ -16302,8 +16346,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_8, [_hoisted_9, $props.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_10, _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && !$props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_13, _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$props.loading && $props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Contact, {
-    key: 2,
+  })])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_8, [_hoisted_9, !$props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_10, _hoisted_12)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.contacts.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Contact, {
+    key: 1,
     contacts: $props.contacts,
     onRemoveContact: $setup.removeContact
   }, null, 8
@@ -16409,18 +16453,9 @@ var API_BASE = "http://127.0.0.1:8000/api/";
             case 2:
               _yield$axios = _context.sent;
               data = _yield$axios.data;
+              return _context.abrupt("return", data);
 
-              if (data.success) {
-                _context.next = 6;
-                break;
-              }
-
-              throw data.response.error;
-
-            case 6:
-              return _context.abrupt("return", data.response.contacts);
-
-            case 7:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -16448,18 +16483,9 @@ var API_BASE = "http://127.0.0.1:8000/api/";
             case 2:
               _yield$axios2 = _context2.sent;
               data = _yield$axios2.data;
+              return _context2.abrupt("return", data);
 
-              if (data.success) {
-                _context2.next = 6;
-                break;
-              }
-
-              throw data.response.error;
-
-            case 6:
-              return _context2.abrupt("return", data.response.contact);
-
-            case 7:
+            case 5:
             case "end":
               return _context2.stop();
           }
@@ -16487,18 +16513,9 @@ var API_BASE = "http://127.0.0.1:8000/api/";
             case 2:
               _yield$axios$post = _context3.sent;
               data = _yield$axios$post.data;
-
-              if (data.success) {
-                _context3.next = 6;
-                break;
-              }
-
-              throw data.response.error;
-
-            case 6:
               return _context3.abrupt("return", data);
 
-            case 7:
+            case 5:
             case "end":
               return _context3.stop();
           }
@@ -16526,19 +16543,9 @@ var API_BASE = "http://127.0.0.1:8000/api/";
             case 2:
               _yield$axios$put = _context4.sent;
               data = _yield$axios$put.data;
-              console.log(data);
-
-              if (data.success) {
-                _context4.next = 7;
-                break;
-              }
-
-              throw data.response.error;
-
-            case 7:
               return _context4.abrupt("return", data);
 
-            case 8:
+            case 5:
             case "end":
               return _context4.stop();
           }
@@ -16566,18 +16573,9 @@ var API_BASE = "http://127.0.0.1:8000/api/";
             case 2:
               _yield$axios$delete = _context5.sent;
               data = _yield$axios$delete.data;
+              return _context5.abrupt("return", data);
 
-              if (data.success) {
-                _context5.next = 6;
-                break;
-              }
-
-              throw data.response.error;
-
-            case 6:
-              return _context5.abrupt("return", data.success);
-
-            case 7:
+            case 5:
             case "end":
               return _context5.stop();
           }
@@ -16638,7 +16636,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var populateForm = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(form, contactID) {
-    var contact;
+    var _yield$APIController$, response, contact;
+
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -16647,14 +16646,16 @@ var populateForm = /*#__PURE__*/function () {
             return _controllers_api__WEBPACK_IMPORTED_MODULE_1__["default"].FetchContact(contactID);
 
           case 2:
-            contact = _context.sent;
-            // update form with API response
+            _yield$APIController$ = _context.sent;
+            response = _yield$APIController$.response;
+            contact = response.contact; // update form with API response
+
             form.name = contact.name;
             form.email = contact.email;
             form.phone = contact.phone;
             form.country = contact.country;
 
-          case 7:
+          case 9:
           case "end":
             return _context.stop();
         }

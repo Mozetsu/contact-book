@@ -12,7 +12,8 @@ export default {
         const loading = true;
 
         const fetchContacts = async () => {
-            contacts.value = await APIController.FetchContacts();
+            const { success, response } = await APIController.FetchContacts();
+            if (success) contacts.value = response.contacts;
         };
 
         const removeContact = (id) => {

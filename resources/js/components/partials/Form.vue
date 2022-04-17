@@ -1,15 +1,13 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import APIController from "../../controllers/api";
 import { validateForm, populateForm } from "../../helpers";
 
 const router = useRouter();
-
 const action = window.location.pathname.split("/")[1].toUpperCase();
 const contactID = useRoute().query.contact;
-
-// const changedFields = ref([]);
+const changedFields = ref([]);
 
 const form = reactive({
     name: "",
@@ -23,40 +21,69 @@ const errors = reactive({
     email: "",
     phone: "",
     country: "",
+    server: "",
 });
 
-if (action === "UPDATE") {
-    populateForm(form, contactID);
-}
+if (action === "UPDATE") populateForm(form, contactID);
 
 // watch for all the input fields that have changed
 const handleFieldChange = (event) => {
-    console.log(event.target);
+    const field = event.target.name;
+    const hasField = changedFields.value.includes(field);
+
+    if (!hasField) changedFields.value.push(field);
 };
 
 const handleFormSubmit = async () => {
-    const isValidForm = validateForm(form, errors);
+    const isValidForm = await validateForm(form, errors);
+
     if (!isValidForm) return;
+
     let contact = null;
 
     // create new contact
     if (action === "CREATE") {
         contact = JSON.stringify(form);
-        const { success } = await APIController.CreateContact(contact);
-        if (success) router.push("/");
+
+        const { success, response } = await APIController.CreateContact(
+            contact
+        );
+
+        if (!success) {
+            const errorField = response.type;
+            return (errors[errorField] = response.error);
+        }
+
+        router.push("/");
     }
 
     // update contact
     if (action === "UPDATE") {
-        contact = JSON.stringify(form);
-        const { success } = await APIController.UpdateContact(
+        if (!changedFields.value.length) return;
+
+        const body = {};
+
+        changedFields.value.forEach((field) => {
+            body[field] = form[field];
+        });
+
+        contact = JSON.stringify(body);
+
+        const { success, response } = await APIController.UpdateContact(
             contact,
             contactID
         );
 
-        if (success) router.push("/");
+        if (!success) {
+            const errorField = response.type;
+            return (errors[errorField] = response.error);
+        }
+
+        router.push("/");
     }
+
     return {
+        action,
         handleFieldChange,
         handleFormSubmit,
     };
@@ -131,5 +158,6 @@ const handleFormSubmit = async () => {
                 <input class="btn btn--primary" type="submit" value="Save" />
             </div>
         </section>
+        <div class="error">{{ errors.server }}</div>
     </form>
 </template>

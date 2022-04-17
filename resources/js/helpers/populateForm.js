@@ -1,7 +1,8 @@
 import APIController from "../controllers/api";
 
 export const populateForm = async (form, contactID) => {
-    const contact = await APIController.FetchContact(contactID);
+    const { response } = await APIController.FetchContact(contactID);
+    const { contact } = response;
 
     // update form with API response
     form.name = contact.name;

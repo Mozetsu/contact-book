@@ -41,6 +41,7 @@ class ContactsController extends Controller
             return [
                 "success" => false,
                 "response" => [
+                    "type" => "email",
                     "error" => "Email address is already associated with an existing contact"
                 ]
             ];
@@ -51,6 +52,7 @@ class ContactsController extends Controller
             return [
                 "success" => false,
                 "response" => [
+                    "type" => "phone",
                     "error" => "Phone number is already associated with an existing contact"
                 ]
             ];
@@ -82,6 +84,7 @@ class ContactsController extends Controller
             return [
                 "success" => false,
                 "response" => [
+                    "type" => "server",
                     "error" => "Contact not found"
                 ]
             ];
@@ -105,6 +108,7 @@ class ContactsController extends Controller
             return [
                 "success" => false,
                 "response" => [
+                    "type" => "server",
                     "error" => "Contact not found"
                 ]
             ];
@@ -124,43 +128,47 @@ class ContactsController extends Controller
 
     // UPDATE CONTACT
     public function update($id) {
+        // convert request json body to object
+        $request = json_decode(request()->getContent());
         $contact = Contact::find($id);
+        $hasEmail = property_exists($request, "email");
+        $hasPhone = property_exists($request, "phone");
 
         // validate database response
         if(empty($contact)) {
             return [
                 "success" => false,
                 "response" => [
+                    "type" => "server",
                     "error" => "Contact not found"
                 ]
             ];
         }
 
-              // validate contact email address
-        if(Contact::where("email", "=", request("email"))->exists()) {
+        // validate contact email address
+        if($hasEmail && Contact::where("email", "=", $request->email)->exists()) {
             return [
                 "success" => false,
                 "response" => [
+                    "type" => "email",
                     "error" => "Email address is already associated with an existing contact"
                 ]
             ];
         }
 
         // validate contact phone number
-        if(Contact::where("phone", "=", request("phone"))->exists()) {
+        if($hasPhone && Contact::where("phone", "=", $request->phone)->exists()) {
             return [
                 "success" => false,
                 "response" => [
+                    "type" => "phone",
                     "error" => "Phone number is already associated with an existing contact"
                 ]
             ];
         }
 
-        // get data from request
-        $data = request()->all();
-
         // update contact fields with new data
-        foreach ($data as $key => $value) {
+        foreach ($request as $key => $value) {
             $contact->{$key} = $value;
         }
 

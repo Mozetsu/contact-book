@@ -6,6 +6,7 @@
         <meta name="csrf-token" value="{{ csrf_token() }}"/>
         <title>Contact Book</title>
         <link href="{{ 'css/app.css' }}" type="text/css" rel="stylesheet"/>
+        <link href="/favicon.svg" type="svg" rel="icon" />
     </head>
     <body>
         <div id="app"></div>

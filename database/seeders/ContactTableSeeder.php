@@ -37,21 +37,21 @@ class ContactTableSeeder extends Seeder
             'name' => 'water',
             'email' => 'water@domain.io',
             'phone' => 333333333,
-            'country' => "Mexico",
+            'country' => "mexico",
         ]);
 
         Contact::create([
             'name' => 'earth',
             'email' => 'earth@domain.io',
             'phone' => 444444444,
-            'country' => "Japan",
+            'country' => "japan",
         ]);
 
         Contact::create([
             'name' => 'thunder',
             'email' => 'thunder@domain.io',
             'phone' => 555555555,
-            'country' => "Sweden",
+            'country' => "sweden",
         ]);
     }
 }
