@@ -62,12 +62,20 @@ Rename **.env.example** file to **.env** in order for Artisan to generate a new 
 php artisan key:generate
 ```
 
-Update database .env varibles
+Create a MySQL database with XAMPP or other similar service, and set database .env variables in project
 
 ```bash
 DB_DATABASE=...
 DB_USERNAME=...
 DB_PASSWORD=...
+```
+
+Generate database tables and populate with random data
+
+```bash
+php artisan migrate
+
+php artisan db:seed
 ```
 
 Start Dev server
