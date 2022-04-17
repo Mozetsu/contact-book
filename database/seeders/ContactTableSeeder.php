@@ -37,6 +37,13 @@ class ContactTableSeeder extends Seeder
             'name' => 'water',
             'email' => 'water@domain.io',
             'phone' => 333333333,
+            'country' => "india",
+        ]);
+
+        Contact::create([
+            'name' => 'water seven',
+            'email' => 'water_seven@domain.io',
+            'phone' => '333333331',
             'country' => "mexico",
         ]);
 
@@ -58,7 +65,14 @@ class ContactTableSeeder extends Seeder
             'name' => 'dark',
             'email' => 'dark@domain.io',
             'phone' => 666666666,
-            'country' => "china",
+            'country' => "italy",
+        ]);
+
+        Contact::create([
+            'name' => 'dark water',
+            'email' => 'dark_water@domain.io',
+            'phone' => 666666661,
+            'country' => "netherlands",
         ]);
     }
 }
